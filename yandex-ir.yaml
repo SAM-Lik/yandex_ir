@@ -1,0 +1,65 @@
+esphome:
+  name: yandex-ir
+  friendly_name: yandex IR
+# Подключение кастомного компонента
+external_components:
+  - source:
+      type: local      
+      path: components
+
+esp8266:
+  board: esp01_1m
+
+switch:
+  - platform: template
+    name: "Learning Mode"
+    id: learning_mode_switch
+    optimistic: true
+
+text_sensor:
+  - platform: template
+    name: "IR Decoded"
+    id: ir_decoded_text
+
+ir_controller:
+  id: my_ir_controller  
+  ir_rx_pin: 5  # GPIO5 для IR приемника
+  ir_tx_pin: 14  # GPIO14 для IR передатчика
+  led_pin: 4    # GPIO4 для светодиода
+  learning_mode_switch: learning_mode_switch
+  decoded_text_sensor: ir_decoded_text
+
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "HIDDEN"
+  services:
+    - service: send_ir_signal
+      variables:
+        protocol: string
+        raw_data: int[]
+      then:
+        - lambda: |-
+            std::vector<uint16_t> raw(raw_data.begin(), raw_data.end());
+            id(my_ir_controller).send_ir_signal(protocol, raw);
+
+ota:
+  - platform: esphome
+    password: "HIDDEN"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Yandex-Ir Fallback Hotspot"
+    password: "HIDDEN"
+
+captive_portal:
+
+    
