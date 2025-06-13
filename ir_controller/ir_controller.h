@@ -14,14 +14,14 @@ class IRController : public Component {
   void loop() override;
   float get_setup_priority() const override { return setup_priority::DATA; }
 
-  // Конфигурация пинов и компонентов
+  // РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїРёРЅРѕРІ Рё РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
   void set_ir_rx_pin(uint8_t pin) { ir_rx_pin_ = pin; }
   void set_ir_tx_pin(uint8_t pin) { ir_tx_pin_ = pin; }
   void set_led_pin(uint8_t pin) { led_pin_ = pin; }
   void set_learning_mode_switch(switch_::Switch *sw) { learning_mode_switch_ = sw; }
   void set_decoded_text_sensor(text_sensor::TextSensor *sensor) { decoded_text_sensor_ = sensor; }
 
-  // Метод для отправки ИК-сигнала из сервиса HA
+  // РњРµС‚РѕРґ РґР»СЏ РѕС‚РїСЂР°РІРєРё РРљ-СЃРёРіРЅР°Р»Р° РёР· СЃРµСЂРІРёСЃР° HA
   void send_ir_signal(const std::string &protocol, const std::vector<uint16_t> &raw_data);
 
  protected:

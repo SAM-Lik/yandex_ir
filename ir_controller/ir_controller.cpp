@@ -8,21 +8,21 @@ namespace ir_controller {
 static const char *TAG = "ir_controller";
 
 void IRController::setup() {
-  // Инициализация пинов
+  // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРёРЅРѕРІ
   pinMode(led_pin_, OUTPUT);
-  digitalWrite(led_pin_, HIGH);  // Светодиод выключен по умолчанию (инвертированный режим)
+  digitalWrite(led_pin_, HIGH);  // РЎРІРµС‚РѕРґРёРѕРґ РІС‹РєР»СЋС‡РµРЅ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ (РёРЅРІРµСЂС‚РёСЂРѕРІР°РЅРЅС‹Р№ СЂРµР¶РёРј)
 
-  // Инициализация IR приемника и передатчика
+  // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ IR РїСЂРёРµРјРЅРёРєР° Рё РїРµСЂРµРґР°С‚С‡РёРєР°
   ir_receiver_ = new IRrecv(ir_rx_pin_, 1024, 50, true);
   ir_sender_ = new IRsend(ir_tx_pin_);
   ir_receiver_->enableIRIn();
   ir_sender_->begin();
 
-  // Подписка на изменение состояния переключателя
+  // РџРѕРґРїРёСЃРєР° РЅР° РёР·РјРµРЅРµРЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ РїРµСЂРµРєР»СЋС‡Р°С‚РµР»СЏ
   if (learning_mode_switch_) {
     learning_mode_switch_->add_on_state_callback([this](bool state) {
       learning_mode_ = state;
-      digitalWrite(led_pin_, state ? LOW : HIGH);  // Инвертированная логика: LOW = включён, HIGH = выключен
+      digitalWrite(led_pin_, state ? LOW : HIGH);  // РРЅРІРµСЂС‚РёСЂРѕРІР°РЅРЅР°СЏ Р»РѕРіРёРєР°: LOW = РІРєР»СЋС‡С‘РЅ, HIGH = РІС‹РєР»СЋС‡РµРЅ
       if (state) {
         ir_receiver_->enableIRIn();
       } else {
@@ -46,11 +46,11 @@ void IRController::handle_learning_mode_() {
 }
 
 void IRController::decode_and_publish_() {
-  // Декодирование протокола и данных с преобразованием String в std::string
+  // Р”РµРєРѕРґРёСЂРѕРІР°РЅРёРµ РїСЂРѕС‚РѕРєРѕР»Р° Рё РґР°РЅРЅС‹С… СЃ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµРј String РІ std::string
   std::string protocol = typeToString(results_.decode_type).c_str();
   std::string decoded_data = resultToHexidecimal(&results_).c_str();
 
-  // Публикация в текстовое поле
+  // РџСѓР±Р»РёРєР°С†РёСЏ РІ С‚РµРєСЃС‚РѕРІРѕРµ РїРѕР»Рµ
   if (decoded_text_sensor_) {
     decoded_text_sensor_->publish_state(protocol + ": " + decoded_data);
   }
@@ -64,8 +64,8 @@ void IRController::send_ir_signal(const std::string &protocol, const std::vector
     return;
   }
 
-  // Отправка RAW данных
-  ir_sender_->sendRaw(raw_data.data(), raw_data.size(), 38);  // 38 kHz по умолчанию
+  // РћС‚РїСЂР°РІРєР° RAW РґР°РЅРЅС‹С…
+  ir_sender_->sendRaw(raw_data.data(), raw_data.size(), 38);  // 38 kHz РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
   ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
 }
 
