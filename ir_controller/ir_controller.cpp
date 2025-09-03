@@ -72,6 +72,7 @@ void IRController::send_ir_signal(const std::string &protocol, const std::vector
   if( protocol=="NEC")
   {
     ir_sender_->sendNEC(uint64_t (raw_data[0].data()));
+    ESP_LOGD(TAG, "NEC");
     ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
   }
   else
