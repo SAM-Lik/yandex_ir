@@ -56,10 +56,11 @@ void IRController::decode_and_publish_() {
   }
 
   ESP_LOGD(TAG, "IR Decoded: Protocol=%s, Data=%s", protocol.c_str(), decoded_data.c_str());
-  for(size_t i=0; i<results_.rawlen; ++i)
-    {
-      ESP_LOGD(TAG, "IR Decoded: raw[%d] = %d", i, results_.rawbuf[i]);
-    }
+  ESP_LOGD(TAG, "IR rawlen = %d", results_.rawlen );
+//  for(size_t i=0; i<results_.rawlen; ++i)
+//    {
+//      ESP_LOGD(TAG, "IR Decoded: raw[%d] = %d", i, results_.rawbuf[i]);
+//    }
 }
 
 void IRController::send_ir_signal(const std::string &protocol, const std::vector<uint16_t> &raw_data) {
