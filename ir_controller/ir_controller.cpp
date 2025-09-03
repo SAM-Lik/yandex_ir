@@ -49,7 +49,7 @@ void IRController::decode_and_publish_() {
   // Декодирование протокола и данных с преобразованием String в std::string
   std::string protocol = typeToString(results_.decode_type).c_str();
   std::string decoded_data = resultToHexidecimal(&results_).c_str();
-  std::string rawlen_ = resultToHumanReadableBasic(&results_).c_str();
+//  std::string rawlen_ = resultToHumanReadableBasic(&results_).c_str();
 
   // Публикация в текстовое поле
   if (decoded_text_sensor_) {
