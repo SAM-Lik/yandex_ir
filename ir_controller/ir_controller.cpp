@@ -39,7 +39,7 @@ void IRController::loop() {
 }
 
 void IRController::handle_learning_mode_() {
-  if (ir_receiver_->decode(&results_, &irparams_save_)) {
+  if (ir_receiver_->decode(&results_)) {
     decode_and_publish_();
     ir_receiver_->resume();
   }
