@@ -49,6 +49,7 @@ void IRController::decode_and_publish_() {
   // Декодирование протокола и данных с преобразованием String в std::string
   std::string protocol = typeToString(results_.decode_type).c_str();
   std::string decoded_data = resultToHexidecimal(&results_).c_str();
+  std::string rawlen_ = resultToHumanReadableBasic(&results_).c_str();
 
   // Публикация в текстовое поле
   if (decoded_text_sensor_) {
@@ -56,7 +57,7 @@ void IRController::decode_and_publish_() {
   }
 
   ESP_LOGD(TAG, "IR Decoded: Protocol=%s, Data=%s", protocol.c_str(), decoded_data.c_str());
-  ESP_LOGD(TAG, "IR rawlen = %d", results_.rawlen );
+  ESP_LOGD(TAG, "IR rawlen = %s", rawlen_.c_str() );
 //  for(size_t i=0; i<results_.rawlen; ++i)
 //    {
 //      ESP_LOGD(TAG, "IR Decoded: raw[%d] = %d", i, results_.rawbuf[i]);
