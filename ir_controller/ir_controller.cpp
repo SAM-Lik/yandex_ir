@@ -69,7 +69,12 @@ void IRController::send_ir_signal(const std::string &protocol, const std::vector
     ESP_LOGW(TAG, "Cannot send IR signal in learning mode");
     return;
   }
-
+  if( protocol=="NEC")
+  {
+    ir_sender_->sendNEC(uint64_t (raw_data[0].data()));
+    ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
+  }
+  else
   // Отправка RAW данных
   ir_sender_->sendRaw(raw_data.data(), raw_data.size(), 38);  // 38 kHz по умолчанию
   ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
