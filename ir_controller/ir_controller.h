@@ -34,6 +34,7 @@ class IRController : public Component {
   IRrecv *ir_receiver_;
   IRsend *ir_sender_;
   decode_results results_;
+  irparams_t irparams_save_;
 
   bool learning_mode_ = false;
 
