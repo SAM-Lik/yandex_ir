@@ -58,15 +58,37 @@ void IRController::decode_and_publish_() {
   ESP_LOGD(TAG, "IR Decoded: Protocol=%s, Data=%s", protocol.c_str(), decoded_data.c_str());
 }
 
-void IRController::send_ir_signal(const std::string &protocol, const std::vector<uint16_t> &raw_data) {
+void IRController::send_ir_signal(const std::string &protocol, const std::vector<uint64_t> &raw_data) {
   if (learning_mode_) {
     ESP_LOGW(TAG, "Cannot send IR signal in learning mode");
     return;
   }
-
-  // Отправка RAW данных
-  ir_sender_->sendRaw(raw_data.data(), raw_data.size(), 38);  // 38 kHz по умолчанию
-  ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
+  switch (protocol)
+  {
+  case "NEC" :
+            for(size_t i=0; i<raw_data.size(); ++i)
+            {
+              ir_sender_->sendNEC(uint64_t (raw_data[i]));
+              ESP_LOGD(TAG, "NEC send = %p", raw_data[i]);
+              ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
+            }
+            break;
+  case "SYMPHONY" :
+            for(size_t i=0; i<raw_data.size(); ++i)
+            {
+              ir_sender_->sendSymphony(uint64_t (raw_data[i]));
+              ESP_LOGD(TAG, "NEC send = %p", raw_data[i]);
+              ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
+            }
+            break;
+  default:
+            // Отправка RAW данных
+            uint16_t buff[100];
+            for(size_t i=0; i<raw_data.size(); ++i)
+              buff[i]= uint16_t(raw_data.data()[i]);
+            ir_sender_->sendRaw(buff, raw_data.size(), 38);  // 38 kHz по умолчанию
+            ESP_LOGD(TAG, "IR Sent: Protocol=%s, Raw data size=%d", protocol.c_str(), raw_data.size());
+  }
 }
 
 }  // namespace ir_controller
